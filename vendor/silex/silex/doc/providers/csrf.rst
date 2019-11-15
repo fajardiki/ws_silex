@@ -29,8 +29,8 @@ Registering
 
 .. note::
 
-    Add the Symfony's `Serializer Component
-    <http://symfony.com/doc/current/components/serializer.html>`_ as a
+    Add the Symfony's `Security CSRF Component
+    <http://symfony.com/doc/current/components/security/index.html>`_ as a
     dependency:
 
     .. code-block:: bash
@@ -46,8 +46,6 @@ Service Provider are protected against CSRF by default.
 You can also use the CSRF protection even without using the Symfony Form
 component. If, for example, you're doing a DELETE action, you can check the
 CSRF token::
-
-.. code-block:: php
 
     use Symfony\Component\Security\Csrf\CsrfToken;
 

@@ -1,6 +1,24 @@
 Changelog
 =========
 
+2.0.3 (2016-08-22)
+------------------
+
+* fixed lazy evaluation of 'monolog.use_error_handler'
+* fixed PHP7 type hint on controllers
+
+2.0.2 (2016-06-14)
+------------------
+
+* fixed Symfony 3.1 deprecations
+
+2.0.1 (2016-05-27)
+------------------
+
+* fixed the silex form extension registration to allow overriding default ones
+* removed support for the obsolete Locale Symfony component (uses the Intl one now)
+* added support for Symfony 3.1
+
 2.0.0 (2016-05-18)
 ------------------
 

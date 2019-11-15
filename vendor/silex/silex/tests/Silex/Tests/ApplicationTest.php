@@ -177,10 +177,34 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testControllersAsMethods()
     {
         $app = new Application();
+        unset($app['exception_handler']);
 
         $app->get('/{name}', 'Silex\Tests\FooController::barAction');
 
         $this->assertEquals('Hello Fabien', $app->handle(Request::create('/Fabien'))->getContent());
+    }
+
+    public function testApplicationTypeHintWorks()
+    {
+        $app = new SpecialApplication();
+        unset($app['exception_handler']);
+
+        $app->get('/{name}', 'Silex\Tests\FooController::barSpecialAction');
+
+        $this->assertEquals('Hello Fabien in Silex\Tests\SpecialApplication', $app->handle(Request::create('/Fabien'))->getContent());
+    }
+
+    /**
+     * @requires PHP 7.0
+     */
+    public function testPhp7TypeHintWorks()
+    {
+        $app = new SpecialApplication();
+        unset($app['exception_handler']);
+
+        $app->get('/{name}', 'Silex\Tests\Fixtures\Php7Controller::typehintedAction');
+
+        $this->assertEquals('Hello Fabien in Silex\Tests\SpecialApplication', $app->handle(Request::create('/Fabien'))->getContent());
     }
 
     public function testHttpSpec()
@@ -668,6 +692,11 @@ class FooController
     {
         return 'Hello '.$app->escape($name);
     }
+
+    public function barSpecialAction(SpecialApplication $app, $name)
+    {
+        return 'Hello '.$app->escape($name).' in '.get_class($app);
+    }
 }
 
 class IncorrectControllerCollection implements ControllerProviderInterface
@@ -679,5 +708,9 @@ class IncorrectControllerCollection implements ControllerProviderInterface
 }
 
 class RouteCollectionSubClass extends RouteCollection
+{
+}
+
+class SpecialApplication extends Application
 {
 }
