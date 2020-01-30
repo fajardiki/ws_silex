@@ -1,6 +1,25 @@
 Changelog
 =========
 
+2.1.0 (2017-05-03)
+------------------
+
+* added more options to security.firewalls
+* added WebLink component integration
+* added parameters to configure the Twig core extension behavior
+* fixed deprecation notices with symfony/twig-bridge 3.2+ in TwigServiceProvider
+* added FormRegistry as a service to enable the extension point
+* removed the build scripts
+* fixed some deprecation warnings
+* added support for registering Swiftmailer plugins
+
+2.0.4 (2016-11-06)
+------------------
+
+* fixed twig.app_variable definition
+* added support for latest versions of Twig 1.x and 2.0 (Twig runtime loaders)
+* added support for Symfony 2.3
+
 2.0.3 (2016-08-22)
 ------------------
 

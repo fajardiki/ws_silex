@@ -34,6 +34,13 @@ class FormServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\Form\FormFactory', $app['form.factory']);
     }
 
+    public function testFormRegistryServiceIsFormRegistry()
+    {
+        $app = new Application();
+        $app->register(new FormServiceProvider());
+        $this->assertInstanceOf('Symfony\Component\Form\FormRegistry', $app['form.registry']);
+    }
+
     public function testFormServiceProviderWillLoadTypes()
     {
         $app = new Application();
@@ -230,7 +237,7 @@ class FormServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app['locale'] = 'de';
 
         $app['csrf.token_manager'] = function () {
-            return $this->getMock('Symfony\Component\Security\Csrf\CsrfTokenManagerInterface');
+            return $this->getMockBuilder('Symfony\Component\Security\Csrf\CsrfTokenManagerInterface')->getMock();
         };
 
         $form = $app['form.factory']->createBuilder('Symfony\Component\Form\Extension\Core\Type\FormType', array())

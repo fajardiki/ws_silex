@@ -1,6 +1,0 @@
-vendor
-.DS_Store
-app/logs/*.log
-*~
-.idea
-app.db
