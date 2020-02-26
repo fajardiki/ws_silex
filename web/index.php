@@ -37,8 +37,7 @@
 
 	$app->get('/bridgelog', function (Silex\Application $app, Request $request) {
 		$result = array();
-
-		$sql = "SELECT * FROM bridge_log LIMIT 100000";
+		$sql = "SELECT * FROM bridge_log LIMIT 1000000";
 		$stmt = $app['db']->query($sql);
 
 		while ($row=$stmt->fetch()) {
