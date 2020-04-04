@@ -61,7 +61,7 @@
 		$time_end = microtime(true);
         $execution_time = $time_end - $time_start;
 
-		return $app->json(array('Bridge_Log' => $result, "Time" => $execution_time));
+		return $app->json(array('Bridge_Log' => $result, "time" => $execution_time));
 	});
 
 	// SEARCH DATA
@@ -75,7 +75,7 @@
 		$time_end = microtime(true);
         $execution_time = $time_end - $time_start;
 
-		return $app->json(array('Bridge_Log' => $result, "Time" => $execution_time));
+		return $app->json(array('Bridge_Log' => $result, "time" => $execution_time));
 	});
 
 	// UPDATE DATA
