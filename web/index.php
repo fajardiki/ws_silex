@@ -79,7 +79,7 @@
 	});
 
 	// UPDATE DATA
-	$app->post('/updatesilex', function(Silex\Application $app,Request $request) {
+	$app->put('/updatesilex', function(Silex\Application $app,Request $request) {
 		$time_start = microtime(true);
 
 		$jmlupdate = (int)$request->get('jumlahupdate');
@@ -160,7 +160,7 @@
 	});
 
 	// DELETE DATA
-	$app->get('/deletesilex/{jmldel}', function($jmldel) use ($app) {
+	$app->delete('/deletesilex/{jmldel}', function($jmldel) use ($app) {
 
 		$time_start = microtime(true);
 		$sql = "SELECT MAX(id) as id FROM bridge_log";
