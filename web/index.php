@@ -6,6 +6,42 @@
 
 	$app = new Silex\Application();
 
+	// Benchmark
+	function startTimer() {
+		global $starttime;
+		$mtime = microtime();
+		$mtime = explode(' ', $mtime);
+		$mtime = $mtime[1] + $mtime[0];
+		$starttime = $mtime;
+	}
+	
+	
+	function endTimer() {
+		global $starttime;
+		$mtime = microtime();
+		$mtime = explode(' ', $mtime);
+		$mtime = $mtime[1] + $mtime[0];
+		$endtime = $mtime;
+		$totaltime = round(($endtime - $starttime), 4);
+		return $totaltime;
+	}
+
+	function memory() {
+        return round(memory_get_usage()/1048576,2);
+	}
+	
+	function get_cpu_usage() {
+        $cmd = "wmic cpu get loadpercentage";
+        exec($cmd, $output, $value);
+
+        if ($value==0) {
+            return $output[1];
+        } else {
+            return "Cannot Get CPU Usage!";
+        }
+    }
+	
+
 	$app->register(New Silex\Provider\DoctrineServiceProvider(), array(
 		'db.options' => array(
 			'driver' => 'mysqli',
@@ -16,71 +52,64 @@
 		),
 	));
 
-	$app->get('/authtenant', function (Silex\Application $app, Request $request) {
-		$result = array();
-
-		$sql = "SELECT * FROM auth_tenant ";
-		$stmt = $app['db']->query($sql);
-
-		while ($row=$stmt->fetch()) {
-			$result[] = array(
-				'id' => $row['id'],
-				'name' => $row['name'],
-				'whitelist' => $row['whitelist'],
-				'key_public' => $row['key_public'],
-				'key_private' => $row['key_private'],
-			);
-		}
-
-		return $app->json(array('Auth_Tenant' => $result));
-	});
-
-
 	// SELECT DATA 
 	$app->get('/bridgelog/{limit}', function($limit) use ($app) {
+		startTimer();
 		$result = array();
 
-		$time_start = microtime(true);
+		for ($i=1; $i <= $limit; $i++) { 
+			$sql = "SELECT * FROM bridge_log WHERE id='$i'";
+			$stmt = $app['db']->query($sql);
 
-		$sql = "SELECT * FROM bridge_log LIMIT $limit";
-		$stmt = $app['db']->query($sql);
-
-		while ($row=$stmt->fetch()) {
-			$result[] = array(
-				'id' => $row['id'],
-				'msisdn' => $row['msisdn'],
-				'called' => $row['called'],
-				'lat' => $row['lat'],
-				'lng' => $row['lng'],
-				'area' => $row['area'],
-				'ts' => $row['ts'],
-				'tenant' => $row['tenant'],
-			);
+			while ($row=$stmt->fetch()) {
+				$result[] = array(
+					'id' => $row['id'],
+					'msisdn' => $row['msisdn'],
+					'called' => $row['called'],
+					'lat' => $row['lat'],
+					'lng' => $row['lng'],
+					'area' => $row['area'],
+					'ts' => $row['ts'],
+					'tenant' => $row['tenant'],
+				);
+			}
 		}
 
-		$time_end = microtime(true);
-        $execution_time = $time_end - $time_start;
+        $cpuu = shell_exec("C:\Windows\System32\wbem\WMIC.exe cpu get loadpercentage");
+        preg_match_all('!\d+!', $cpuu, $matches);
 
-		return $app->json(array('Bridge_Log' => $result, "time" => $execution_time));
+		return $app->json(array(
+			'result'=>'succes',
+			'Bridge_Log'=>$result,
+			'request'=>$i,
+			'time'=>endTimer()." Second",
+			'memory'=>memory().' MB',
+			'cpu'=>get_cpu_usage()."%"
+		));
 	});
 
 	// SEARCH DATA
 	$app->get('/searchsilex/{cari}', function($cari) use ($app) {
-		$time_start = microtime(true);
+		startTimer();
 
 		$sql = "SELECT * FROM bridge_log WHERE msisdn='$cari'";
 		$stmt = $app['db']->query($sql);
 		$result = $stmt->fetchAll();
 
-		$time_end = microtime(true);
-        $execution_time = $time_end - $time_start;
-
-		return $app->json(array('Bridge_Log' => $result, "time" => $execution_time));
+		return $app->json(
+			array(
+				'result'=>'succes',
+				'Bridge_Log'=>$result,
+				'time'=>endTimer()." Second",
+				'memory'=>memory().' MB',
+				'cpu'=>get_cpu_usage()."%"
+			)
+		);
 	});
 
 	// UPDATE DATA
 	$app->put('/updatesilex', function(Silex\Application $app,Request $request) {
-		$time_start = microtime(true);
+		startTimer();
 
 		$jmlupdate = (int)$request->get('jumlahupdate');
 		$msisdn = $request->get('msisdn');
@@ -107,13 +136,21 @@
 			$stmt = $app['db']->query($sql);
 		}
 
-		$time_end = microtime(true);
-		$execution_time = $time_end - $time_start;
-
 		if ($stmt) {
-			return $app->json(array('message' => 'Update Succes', 'time' => $execution_time));
+			return $app->json(array(
+				'result'=>'succes',
+				'request'=>$i,
+				'time'=>endTimer()." Second",
+				'memory'=>memory().' MB',
+				'cpu'=>get_cpu_usage()."%"
+			));
 		} else {
-			return $app->json(array('message' => 'Update Failed', 'time' => $execution_time));
+			return $app->json(array(
+				'result'=>'failed',
+				'time'=>endTimer()." Second",
+				'memory'=>memory().' MB',
+				'cpu'=>get_cpu_usage()."%"
+			));
 		}
 
 	});
@@ -121,7 +158,7 @@
 	// INSERT DATA
 	$app->post('/insertsilex', function(Silex\Application $app,Request $request) {
 
-		$time_start = microtime(true);
+		startTimer();
 
 		$msisdn = $request->get('msisdn');
 		$called = $request->get('called');
@@ -147,22 +184,30 @@
 			$stmt = $app['db']->query($sqlinsert);
 		}
 
-		$time_end = microtime(true);
-		$execution_time = $time_end - $time_start;
-
 		if ($stmt) {
-			return $app->json(array('message' => 'Update Succes', 'time' => $execution_time));
+			return $app->json(array(
+				'result'=>'succes',
+				'request'=>$i,
+				'time'=>endTimer()." Second",
+				'memory'=>memory().' MB',
+				'cpu'=>get_cpu_usage()."%"
+			));
 		} else {
-			return $app->json(array('message' => 'Update Failed', 'time' => $execution_time));
+			return $app->json(array(
+				'result'=>'failed',
+				'time'=>endTimer()." Second",
+				'memory'=>memory().' MB',
+				'cpu'=>get_cpu_usage()."%"
+			));
 		}
-		// return $app->json(array('message' => $id, 'lastid' => $lastid));
 
 	});
 
 	// DELETE DATA
 	$app->delete('/deletesilex/{jmldel}', function($jmldel) use ($app) {
 
-		$time_start = microtime(true);
+		startTimer();
+
 		$sql = "SELECT MAX(id) as id FROM bridge_log";
 		$sqlid = $app['db']->query($sql);
 
@@ -180,13 +225,21 @@
 			$stmt = $app['db']->query($sql);
 		}
 
-		$time_end = microtime(true);
-		$execution_time = $time_end - $time_start;
-
 		if ($stmt) {
-			return $app->json(array('message' => 'Delete Succes', 'time' => $execution_time));
+			return $app->json(array(
+				'result'=>'succes',
+				'request'=>$i,
+				'time'=>endTimer()." Second",
+				'memory'=>memory().' MB',
+				'cpu'=>get_cpu_usage()."%"
+			));
 		} else {
-			return $app->json(array('message' => 'Delete Failed', 'time' => $execution_time));
+			return $app->json(array(
+				'result'=>'failed',
+				'time'=>endTimer()." Second",
+				'memory'=>memory().' MB',
+				'cpu'=>get_cpu_usage()."%"
+			));
 		}
 	});
 

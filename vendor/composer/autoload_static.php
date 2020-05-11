@@ -43,6 +43,10 @@ class ComposerStaticInit2d16d680a421b3ad26264f963ca98cfb
             'Psr\\Container\\' => 14,
             'Prophecy\\' => 9,
         ),
+        'M' => 
+        array (
+            'MyApp\\' => 6,
+        ),
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
@@ -122,6 +126,10 @@ class ComposerStaticInit2d16d680a421b3ad26264f963ca98cfb
         'Prophecy\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
+        ),
+        'MyApp\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/MyApp',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
