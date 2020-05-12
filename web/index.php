@@ -53,7 +53,7 @@
 	));
 
 	// SELECT DATA 
-	$app->get('/bridgelog/{limit}', function($limit) use ($app) {
+	$app->get('/selectsilex/{limit}', function($limit) use ($app) {
 		startTimer();
 		$result = array();
 
@@ -74,9 +74,6 @@
 				);
 			}
 		}
-
-        $cpuu = shell_exec("C:\Windows\System32\wbem\WMIC.exe cpu get loadpercentage");
-        preg_match_all('!\d+!', $cpuu, $matches);
 
 		return $app->json(array(
 			'result'=>'succes',
