@@ -79,7 +79,7 @@
 			'result'=>'succes',
 			'Bridge_Log'=>$result,
 			'request'=>$i,
-			'time'=>endTimer()." Second",
+			'time'=>endTimer()." Sec",
 			'memory'=>memory().' MB',
 			'cpu'=>get_cpu_usage()."%"
 		));
@@ -97,7 +97,7 @@
 			array(
 				'result'=>'succes',
 				'Bridge_Log'=>$result,
-				'time'=>endTimer()." Second",
+				'time'=>endTimer()." Sec",
 				'memory'=>memory().' MB',
 				'cpu'=>get_cpu_usage()."%"
 			)
@@ -137,14 +137,14 @@
 			return $app->json(array(
 				'result'=>'succes',
 				'request'=>$i,
-				'time'=>endTimer()." Second",
+				'time'=>endTimer()." Sec",
 				'memory'=>memory().' MB',
 				'cpu'=>get_cpu_usage()."%"
 			));
 		} else {
 			return $app->json(array(
 				'result'=>'failed',
-				'time'=>endTimer()." Second",
+				'time'=>endTimer()." Sec",
 				'memory'=>memory().' MB',
 				'cpu'=>get_cpu_usage()."%"
 			));
@@ -185,14 +185,14 @@
 			return $app->json(array(
 				'result'=>'succes',
 				'request'=>$i,
-				'time'=>endTimer()." Second",
+				'time'=>endTimer()." Sec",
 				'memory'=>memory().' MB',
 				'cpu'=>get_cpu_usage()."%"
 			));
 		} else {
 			return $app->json(array(
 				'result'=>'failed',
-				'time'=>endTimer()." Second",
+				'time'=>endTimer()." Sec",
 				'memory'=>memory().' MB',
 				'cpu'=>get_cpu_usage()."%"
 			));
@@ -226,14 +226,14 @@
 			return $app->json(array(
 				'result'=>'succes',
 				'request'=>$i,
-				'time'=>endTimer()." Second",
+				'time'=>endTimer()." Sec",
 				'memory'=>memory().' MB',
 				'cpu'=>get_cpu_usage()."%"
 			));
 		} else {
 			return $app->json(array(
 				'result'=>'failed',
-				'time'=>endTimer()." Second",
+				'time'=>endTimer()." Sec",
 				'memory'=>memory().' MB',
 				'cpu'=>get_cpu_usage()."%"
 			));
